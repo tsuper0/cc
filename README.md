@@ -1,62 +1,44 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include <string.h>
 
-int main() { int n, i; int maleCount = 0, femaleCount = 0; char name[50], sex;
+int main() {
+    int male_count = 0, female_count = 0, total = 0;
+    char name[50], sex[10], ans;
 
-printf("Enter number of participants: ");
-scanf("%d", &n);
-getchar(); // clear newline left in buffer
-
-for (i = 1; i <= n; i++) {
-    // Ask for NAME (cannot be empty)
     do {
-        printf("\nEnter name of participant %d: ", i);
-        fgets(name, sizeof(name), stdin);
+        total++;  
+        printf("\nParticipant %d:\n", total);
 
-        // Remove newline character from fgets
-        name[strcspn(name, "\n")] = '\0';
-
-        if (strlen(name) == 0) {
-            printf("Name cannot be empty! Please enter again.\n");
-        }
-    } while (strlen(name) == 0);
-
-    // Ask for SEX (must be M/F)
-    do {
+        printf("Enter name: ");
+        scanf("%s", name);  
         printf("Enter sex (M/F): ");
-        scanf(" %c", &sex);
+        scanf("%s", sex);
 
-        if (sex == 'M' || sex == 'm') {
-            maleCount++;
-            break;
-        } else if (sex == 'F' || sex == 'f') {
-            femaleCount++;
-            break;
+        if (strcmp(sex, "M") == 0 || strcmp(sex, "m") == 0) {
+            male_count++;
+        } else if (strcmp(sex, "F") == 0 || strcmp(sex, "f") == 0) {
+            female_count++;
         } else {
-            printf("Invalid input for sex. Please enter M or F.\n");
+            printf("Invalid sex, skipping...\n");
+            total--;
+            continue;
         }
-    } while (1);
 
-    getchar(); // clear buffer after reading sex
-}
+        printf("Do you want to add another participant? (Y/N): ");
+        scanf(" %c", &ans);
 
-printf("\n=====================================\n");
-printf(" Seminar Participants Summary\n");
-printf("=====================================\n");
-printf("Total Participants : %d\n", n);
-printf("Male Participants  : %d\n", maleCount);
-printf("Female Participants: %d\n", femaleCount);
+    } while (ans == 'Y' || ans == 'y');
 
-printf("-------------------------------------\n");
+    printf("\n--- Seminar Summary ---\n");
+    printf("Total Participants: %d\n", total);
+    printf("Male Participants: %d\n", male_count);
+    printf("Female Participants: %d\n", female_count);
 
-if (n > 500) {
-    printf("✅ The seminar CAN be held!\n");
-} else {
-    printf("❌ The seminar CANNOT be held (need more than 500 participants).\n");
-    printf("Participants needed: %d more\n", 501 - n);
-}
+    if (total > 500) {
+        printf("The seminar will be held.\n");
+    } else {
+        printf("The seminar cannot be held. (Not enough participants)\n");
+    }
 
-printf("=====================================\n");
-
-return 0;
+    return 0;
 }
